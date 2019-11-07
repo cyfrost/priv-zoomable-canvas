@@ -2,15 +2,19 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Input, Output, EventEm
 
 @Component({
     selector: 'zoomable-canvas',
-    template: `<canvas #canvas
-        (mousedown)="mousedown($event)" (mousemove)="mousemove($event);"
-        (mousewheel)="mousewheel($event)"
-        (window:resize)="onresize()"
-        style="width: 100%; height: 100%"
-        ></canvas>`
+    template: `
+        <canvas
+            #canvas
+            (mousedown)="mousedown($event)"
+            (mousemove)="mousemove($event)"
+            (mousewheel)="mousewheel($event)"
+            (window:resize)="onresize()"
+            style="width: 100%; height: 100%"
+        ></canvas>
+    `
 })
 export class ZoomableCanvasComponent implements AfterViewInit {
-    @ViewChild("canvas") canvasRef : ElementRef;
+    @ViewChild('canvas', { static: false }) canvasRef: ElementRef;
     private canvas: any;
     private context: any;
     private imageValue: HTMLImageElement;
@@ -59,7 +63,7 @@ export class ZoomableCanvasComponent implements AfterViewInit {
 
         if (this.canvas.getContext) {
             this.context = this.canvas.getContext('2d');
-            
+
             this.loadImage(this.image);
         }
     }
@@ -90,15 +94,20 @@ export class ZoomableCanvasComponent implements AfterViewInit {
     }
 
     private draw(center: Point, zoomRatio: number) {
-        if (this.context) 
-        {
+        if (this.context) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             this.context.drawImage(
-                    this.image, 0, 0, 
-                    this.image.width, this.image.height,
-                    this.image.width / 2 - center.x * zoomRatio, this.image.height / 2 - center.y * zoomRatio,
-                    this.image.width * zoomRatio, this.image.height * zoomRatio);
+                this.image,
+                0,
+                0,
+                this.image.width,
+                this.image.height,
+                this.image.width / 2 - center.x * zoomRatio,
+                this.image.height / 2 - center.y * zoomRatio,
+                this.image.width * zoomRatio,
+                this.image.height * zoomRatio
+            );
         }
     }
 
@@ -112,7 +121,7 @@ export class ZoomableCanvasComponent implements AfterViewInit {
 
         val.onload = () => {
             this.loadImage(val);
-        }
+        };
     }
 
     get top(): number {
@@ -161,7 +170,7 @@ export class ZoomableCanvasComponent implements AfterViewInit {
         var newZoomRatio = Math.pow(2, val);
         var previousZoomRatio = this.zoomRatio;
 
-        if (this.context) setTimeout(() => this.rescale(previousZoomRatio == undefined? 1 : previousZoomRatio, newZoomRatio));
+        if (this.context) setTimeout(() => this.rescale(previousZoomRatio == undefined ? 1 : previousZoomRatio, newZoomRatio));
 
         this.zoomLevelValue = val;
         this.zoomRatio = newZoomRatio;
@@ -188,9 +197,8 @@ export class ZoomableCanvasComponent implements AfterViewInit {
 
     private setCenterX(val: number, redraw: boolean) {
         if (val == this.centerXValue) return;
-        if (this.image)
-            val = this.clampCenter(val, this.image.width);
-            
+        if (this.image) val = this.clampCenter(val, this.image.width);
+
         this.left = val - this.image.width / (2 * this.zoomRatio);
         this.right = val + this.image.width / (2 * this.zoomRatio);
 
@@ -208,23 +216,21 @@ export class ZoomableCanvasComponent implements AfterViewInit {
     }
 
     set centerY(val: number) {
-        this.setCenterY(val, true);   
+        this.setCenterY(val, true);
     }
 
     private setCenterY(val: number, redraw: boolean) {
         if (val == this.centerYValue) return;
-        
-        if (this.image)
-            val = this.clampCenter(val, this.image.height);
-        
+
+        if (this.image) val = this.clampCenter(val, this.image.height);
+
         this.centerYValue = val;
         this.centerYChange.emit(val);
 
         this.top = val - this.image.height / (2 * this.zoomRatio);
         this.bottom = val + this.image.height / (2 * this.zoomRatio);
 
-        if (redraw)
-            this.draw({ x: this.centerXValue, y: val }, this.zoomRatio );
+        if (redraw) this.draw({ x: this.centerXValue, y: val }, this.zoomRatio);
     }
 
     private clampCenter(val: number, length: number): number {
@@ -262,16 +268,16 @@ export class ZoomableCanvasComponent implements AfterViewInit {
         this.draw({ x: this.centerX, y: this.centerY }, newZoomRatio);
     }
 
-    public mousedown(event : MouseEvent) {
+    public mousedown(event: MouseEvent) {
         this.dragPos = { x: event.offsetX, y: event.offsetY };
     }
 
-    public mousemove(event : MouseEvent) {
+    public mousemove(event: MouseEvent) {
         if (event.buttons > 0) {
             if (this.dragPos == null) this.dragPos = { x: event.offsetX, y: event.offsetY };
 
-            var dx = (event.offsetX - this.dragPos.x)/this.zoomRatio;
-            var dy = (event.offsetY - this.dragPos.y)/this.zoomRatio;
+            var dx = (event.offsetX - this.dragPos.x) / this.zoomRatio;
+            var dy = (event.offsetY - this.dragPos.y) / this.zoomRatio;
 
             var centerXVal = this.centerXValue - dx;
             this.setCenterX(centerXVal, false);
@@ -290,7 +296,7 @@ export class ZoomableCanvasComponent implements AfterViewInit {
         var previousZoomRatio = this.zoomRatio;
         var newZoomLevel = this.clampZoomLevel(previousZoomLevel + event.deltaY * 0.05);
         var newZoomRatio = Math.pow(2, newZoomLevel);
- 
+
         this.rescale(previousZoomRatio, newZoomRatio, { x: event.offsetX, y: event.offsetY });
 
         this.zoomLevelValue = newZoomLevel;
@@ -305,6 +311,6 @@ export class ZoomableCanvasComponent implements AfterViewInit {
 }
 
 interface Point {
-    x: number,
-    y: number
+    x: number;
+    y: number;
 }

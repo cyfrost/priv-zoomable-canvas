@@ -1,28 +1,30 @@
 {
-  "name": "@durwella/zoomable-canvas",
-  "version": "1.1.0",
+  "name": "@cyfrost/zoomable-canvas",
+  "version": "2.0.0",
   "description": "An Angular 2 component allowing panning and zooming an image in a canvas element",
   "main": "index.js",
   "typings": "index.d.ts",
   "peerDependencies": {
-    "@angular/core": "^4.2.4",
-    "zone.js": "^0.8.5",
-    "rxjs": "^5.2.0"
+    "@angular/core": "^8.2.13",
+    "zone.js": "^0.10.2",
+    "rxjs": "^6.5.3"
   },
   "devDependencies": {
-    "@angular/core": "^4.2.4",
-    "@angular/compiler": "^4.2.4",
-    "@angular/compiler-cli": "^4.2.4",
-    "rxjs": "^5.2.0",
-    "typescript": "^2.0.0",
-    "zone.js": "^0.8.5"
+    "@angular/compiler": "^8.2.13",
+    "@angular/compiler-cli": "^8.2.13",
+    "@angular/core": "^8.2.13",
+    "@types/node": "^12.12.6",
+    "rxjs": "^6.5.3",
+    "typescript": "^3.7.2",
+    "zone.js": "^0.10.2"
   },
   "scripts": {
-    "build": "rm -rf lib && tsc -p src"
+    "build": "rm -rf lib && tsc -p src",
+    "clean": "rm -rf lib"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Durwella/zoomable-canvas.git"
+    "url": "https://github.com/cyfrost/zoomable-canvas.git"
   },
   "author": "Neal Miller <neal.miller@durwella.com>",
   "license": "MIT"

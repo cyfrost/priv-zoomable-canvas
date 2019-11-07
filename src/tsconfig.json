@@ -2,8 +2,9 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
-    "module": "commonjs",
+    "downlevelIteration": true,
+    "target": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "removeComments": true,
     "sourceMap": true,
@@ -14,6 +15,8 @@
     "node_modules"
   ],
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }
